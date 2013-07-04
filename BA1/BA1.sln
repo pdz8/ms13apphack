@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Windows Phone
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BA1", "BA1\BA1.csproj", "{A3D7F61F-C23A-45DE-833C-C9438612F32E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnoozeBox", "SnoozeBox\SnoozeBox.csproj", "{74B29EC6-A32D-4B10-A62C-343011D8E630}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM = Debug|ARM
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|ARM = Release|ARM
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Debug|ARM.ActiveCfg = Debug|ARM
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Debug|ARM.Build.0 = Debug|ARM
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Debug|ARM.Deploy.0 = Debug|ARM
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Debug|x86.ActiveCfg = Debug|x86
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Debug|x86.Build.0 = Debug|x86
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Debug|x86.Deploy.0 = Debug|x86
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Release|ARM.ActiveCfg = Release|ARM
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Release|ARM.Build.0 = Release|ARM
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Release|ARM.Deploy.0 = Release|ARM
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Release|x86.ActiveCfg = Release|x86
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Release|x86.Build.0 = Release|x86
+		{A3D7F61F-C23A-45DE-833C-C9438612F32E}.Release|x86.Deploy.0 = Release|x86
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Debug|ARM.ActiveCfg = Debug|ARM
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Debug|ARM.Build.0 = Debug|ARM
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Debug|ARM.Deploy.0 = Debug|ARM
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Debug|x86.ActiveCfg = Debug|x86
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Debug|x86.Build.0 = Debug|x86
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Debug|x86.Deploy.0 = Debug|x86
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Release|ARM.ActiveCfg = Release|ARM
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Release|ARM.Build.0 = Release|ARM
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Release|ARM.Deploy.0 = Release|ARM
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Release|x86.ActiveCfg = Release|x86
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Release|x86.Build.0 = Release|x86
+		{74B29EC6-A32D-4B10-A62C-343011D8E630}.Release|x86.Deploy.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

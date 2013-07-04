@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<VoiceCommands xmlns="http://schemas.microsoft.com/voicecommands/1.0">
+  
+  <!--Command set for all US English commands-->
+  <CommandSet xml:lang="en-us" Name="StopAlarmEnu">
+    
+    <CommandPrefix>Stop Alarm</CommandPrefix>
+    <Example>search stops for route 452</Example>
+
+    <Command Name="StopSearchByRoute">
+      <Example>search stops for route 452</Example>
+      <ListenFor>route {route_num}</ListenFor>
+      <ListenFor>search stops for route {route_num}</ListenFor>
+      <ListenFor>find stops for route {route_num}</ListenFor>
+      <Feedback>Showing stops for route {route_num}</Feedback>
+      <Navigate Target="/Pages/StopResultPage.xaml"/>
+    </Command>
+
+    <PhraseList Label="route_num"></PhraseList>
+    
+  </CommandSet>
+  
+</VoiceCommands>
