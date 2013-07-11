@@ -89,11 +89,27 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackPanel Margin="0,17,0,28" Grid.Row="0">
-                <TextBlock Text="{Binding HeaderTitle}" 
-                           Style="{StaticResource PhoneTextNormalStyle}"/>
-                <TextBlock Text="stop alarm" 
+                <StackPanel Orientation="Horizontal" Margin="8,0,12,0">
+                    <Rectangle Fill="Black" Stroke="Black"
+                               Height="32" Width="32"
+                               Margin="0,-3,-6,-3">
+                        <Rectangle.OpacityMask>
+                            <ImageBrush Stretch="Fill"
+                                        ImageSource="/Assets/100x100.png"/>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Text="{Binding HeaderTitle}" 
+                               Style="{StaticResource PhoneTextNormalStyle}" 
+                               VerticalAlignment="Bottom"
+                               Name="HeaderTitle"/>
+                </StackPanel>
+                <!--<TextBlock Text="{Binding HeaderTitle}" 
+                           Style="{StaticResource PhoneTextNormalStyle}"/>-->
+                <TextBlock Text="{Binding Title}" 
                            Margin="9,-7,0,0"
                            Style="{StaticResource PhoneTextTitle1Style}"/>
+                <!--<TextBlock Text="{Binding StopName}"
+                           Style="{StaticResource PhoneTextAccentStyle}"/>-->
             </StackPanel>
             <Grid x:Name="ContentPanel"  Margin="12,0,12,0" Grid.Row="1">
                 <ScrollViewer VerticalScrollBarVisibility="Disabled">

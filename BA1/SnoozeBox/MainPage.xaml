@@ -8,6 +8,7 @@
     xmlns:maps="clr-namespace:Microsoft.Phone.Maps.Controls;assembly=Microsoft.Phone.Maps"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:mapkit="clr-namespace:Microsoft.Phone.Maps.Toolkit;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:sky="clr-namespace:Microsoft.Live.Controls;assembly=Microsoft.Live.Controls"
     x:Class="SnoozeBox.MainPage"
     mc:Ignorable="d"
     d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
@@ -40,6 +41,7 @@
          -->
 
         <phone:Pivot Title="MY APPLICATION">
+            
             <phone:PivotItem Header="first">
                 <StackPanel ScrollViewer.VerticalScrollBarVisibility="Visible">
                     <TextBlock Name="aboveMap" Text=""/>
@@ -106,6 +108,23 @@
                             </DataTemplate>
                     </phone:LongListSelector.ItemTemplate>
                 </phone:LongListSelector>
+            </phone:PivotItem>
+            
+            <phone:PivotItem Header="fourth">
+                <StackPanel>
+                    <sky:SignInButton Branding="Skydrive"
+                                      Scopes="wl.skydrive_update wl.offline_access"
+                                      SessionChanged="SignInButton_SessionChanged"
+                                      ClientId="00000000440FBD35"
+                                      TextType="SignIn"
+                                      Name="SkySignInBtn" RenderTransformOrigin="0.5,0.5">
+                        <sky:SignInButton.RenderTransform>
+                            <CompositeTransform Rotation="2.862"/>
+                        </sky:SignInButton.RenderTransform>
+                    </sky:SignInButton>
+                    <Button Content="Backup"
+                            Click="Button_Click_1"/>
+                </StackPanel>
             </phone:PivotItem>
             
         </phone:Pivot>

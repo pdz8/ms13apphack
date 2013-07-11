@@ -84,8 +84,16 @@ namespace BA1
         /// <returns></returns>
         public static string ToMilesString(this double miles)
         {
-            miles = Math.Round(miles, 1);
-            string dist_str = miles.ToString();
+            string dist_str;
+            if (miles >= 0)
+            {
+                miles = Math.Round(miles, 1);
+                dist_str = miles.ToString();
+            }
+            else
+            {
+                dist_str = "--";
+            }
             return dist_str + " mile" + (dist_str != "1" ? "s" : "");
         }
 
@@ -185,7 +193,7 @@ namespace BA1
             }
         }
 
-        public const string CommandSetName = "StopAlarmEnu";
+        public const string CommandSetName = "BusAlarmEnu";
         public const string RouteNumPhraseList = "route_num";
         public const string SearchCommandName = "StopSearchByRoute";
 

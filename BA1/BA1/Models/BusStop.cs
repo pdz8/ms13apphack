@@ -116,6 +116,50 @@ namespace BA1
             }
         }
 
+        #region Distances
+
+        /// <summary>
+        /// Distance left to to destination in meters
+        /// </summary>
+        public double DistanceLeft
+        {
+            get 
+            {
+                return LocationTracker.Location != null ? 
+                    this.Location.GetDistanceTo(LocationTracker.Location) : 
+                    -1;
+            }
+        }
+        public string DistanceString
+        {
+            get 
+            { 
+                return "Distance: " + DistanceLeft.MetersToMiles().ToMilesString(); 
+            }
+        }
+
+        /// <summary>
+        /// Notify distance left and distance strings have changed
+        /// </summary>
+        public void NotifyDistances()
+        {
+            this.NotifyPropertyChanged("DistanceLeft");
+            this.NotifyPropertyChanged("DistanceString");
+        }
+
+        /// <summary>
+        /// Notify the location has changed for all stops
+        /// </summary>
+        public static void NotifyAllDistances()
+        {
+            foreach (var stop in AppSettings.KnownStops.Value.Values)
+            {
+                stop.NotifyDistances();
+            }
+        }
+
+        #endregion
+
         #region Pin to start
 
         /// <summary>
@@ -134,7 +178,8 @@ namespace BA1
             Uri tileUri = new Uri(string.Format("/Pages/TrackingPage.xaml?stop_id={0}", stop.Id), UriKind.Relative);
             StandardTileData tileData = new StandardTileData()
             {
-                Title = stop.Name
+                Title = stop.Name,
+                BackgroundImage = new Uri("/Assets/Tiles/336x336.png", UriKind.Relative)
             };
 
             ShellTile.Create(tileUri, tileData, false);
@@ -154,22 +199,6 @@ namespace BA1
         public bool IsNotPinned { get { return !IsPinned; } }
 
         #endregion
-
-        ///// <summary>
-        ///// Used to sort stops by distance on StopResultpage
-        ///// </summary>
-        ///// <param name="x"></param>
-        ///// <param name="y"></param>
-        ///// <returns></returns>
-        //public static int CompareStopsByDistance(BusStop x, BusStop y)
-        //{
-        //    if (LocationTracker.Location == null) return 0;
-        //    var distx = LocationTracker.Location.GetDistanceTo(x.Location);
-        //    var disty = LocationTracker.Location.GetDistanceTo(y.Location);
-        //    if (distx < disty) return -1;
-        //    if (disty > distx) return 1;
-        //    else return 0;
-        //}
 
         private string _Name = "";
 

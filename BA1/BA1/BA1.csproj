@@ -93,6 +93,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Classes\AlarmHandler.cs" />
     <Compile Include="Classes\AppSettings.cs" />
     <Compile Include="Classes\LocationTracker.cs" />
     <Compile Include="Classes\TiltEffect.cs" />
@@ -146,31 +147,20 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\100x100.png" />
     <Content Include="Assets\AlignmentGrid.png" />
-    <Content Include="Assets\ApplicationIcon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Tiles\FlipCycleTileLarge.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Tiles\FlipCycleTileMedium.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Tiles\FlipCycleTileSmall.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Tiles\IconicTileMediumLarge.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Tiles\IconicTileSmall.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Resource Include="Images\checkerflag.png" />
+    <Content Include="Assets\Tiles\134x202.png" />
+    <Content Include="Assets\Tiles\159x159.png" />
+    <Content Include="Assets\Tiles\336x336.png" />
+    <Content Include="Assets\Tiles\691x336.png" />
+    <Content Include="Assets\Tiles\71x110.png" />
     <Content Include="Images\feature.search.png" />
     <Resource Include="Images\searchbutton.png" />
     <Content Include="Images\next.png" />
     <Content Include="README_FIRST.txt" />
     <Content Include="Resources\BusStopVHD.xml" />
+    <Content Include="Sounds\clockring.mp3" />
     <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Check.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Delete.png" />

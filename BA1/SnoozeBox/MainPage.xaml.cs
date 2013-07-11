@@ -18,6 +18,8 @@ using SnoozeBox.ViewModels;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Diagnostics;
+using Microsoft.Live;
+using System.IO.IsolatedStorage;
 
 namespace SnoozeBox
 {
@@ -163,6 +165,46 @@ namespace SnoozeBox
             if (theMap != null) theMap.ZoomLevel = sld.Value;
         }
 
+        #region Skydrive
+
+        private LiveConnectClient liveClient;
+        //private static SavedSetting<string> SavedSession = new SavedSetting<string>("lcs");
+
+        private void SignInButton_SessionChanged(object sender, Microsoft.Live.Controls.LiveConnectSessionChangedEventArgs e)
+        {
+            if (e.Status == LiveConnectSessionStatus.Connected)
+            {
+                this.liveClient = new LiveConnectClient(e.Session);
+                MessageBox.Show("connected to skydrive and got client");
+            }
+        }
+
+        private async void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            //if (this.liveClient == null) return;
+            if (this.SkySignInBtn.Session == null)
+            {
+                MessageBox.Show("session is null"); return;
+            }
+            //this.liveClient = new LiveConnectClient(this.SkySignInBtn.Session);
+            try
+            {
+                LiveAuthClient auth = new LiveAuthClient("00000000440FBD35");
+                LiveLoginResult loginResult = await auth.LoginAsync(new string[] { "wl.basic" });
+                if (loginResult.Status == LiveConnectSessionStatus.Connected)
+                {
+                    MessageBox.Show("signed in");
+                    this.liveClient = new LiveConnectClient(loginResult.Session);
+                }
+            }
+            catch (LiveAuthException exception)
+            {
+                MessageBox.Show("error: " + exception.Message);
+            }
+        }
+
+        #endregion
+
         // Sample code for building a localized ApplicationBar
         //private void BuildLocalizedApplicationBar()
         //{
@@ -179,4 +221,81 @@ namespace SnoozeBox
         //    ApplicationBar.MenuItems.Add(appBarMenuItem);
         //}
     }
+
+    public class SavedSetting<T> where T : new()
+    {
+        private static IsolatedStorageSettings IsoSettings = IsolatedStorageSettings.ApplicationSettings;
+
+        public string Key { get; private set; }
+        public T Value { get; set; }
+
+        public SavedSetting(string key, T defval)
+        {
+            Key = key;
+            this.Load(defval);
+        }
+        public SavedSetting(string key)
+        {
+            Key = key;
+            this.Load();
+        }
+
+        /// <summary>
+        /// Load setting from Isolated Storage
+        /// </summary>
+        /// <returns>Success</returns>
+        public T Load(T defval)
+        {
+            if (IsoSettings.Contains(this.Key))
+            {
+                this.Value = (T)IsoSettings[this.Key];
+            }
+            else
+            {
+                this.Value = defval;
+            }
+            return Value;
+        }
+        public T Load()
+        {
+            return this.Load(new T());
+        }
+
+        /// <summary>
+        /// Update the save setting to Value
+        /// </summary>
+        /// <returns></returns>
+        public bool Save()
+        {
+            if (IsoSettings.Contains(this.Key))
+            {
+                if (((T)IsoSettings[this.Key]).Equals(this.Value))
+                {
+                    IsoSettings[Key] = this.Value;
+                    IsoSettings.Save();
+                    return true;
+                }
+                return false;
+            }
+            else
+            {
+                IsoSettings.Add(Key, this.Value);
+                IsoSettings.Save();
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Update to nu_val and save
+        /// </summary>
+        /// <param name="nu_val"></param>
+        /// <returns></returns>
+        public bool UpdateSave(T nu_val)
+        {
+            this.Value = nu_val;
+            return this.Save();
+        }
+
+    }
+
 }

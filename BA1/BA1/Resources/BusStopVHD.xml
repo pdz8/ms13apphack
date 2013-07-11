@@ -2,9 +2,9 @@
 <VoiceCommands xmlns="http://schemas.microsoft.com/voicecommands/1.0">
   
   <!--Command set for all US English commands-->
-  <CommandSet xml:lang="en-us" Name="StopAlarmEnu">
+  <CommandSet xml:lang="en-us" Name="BusAlarmEnu">
     
-    <CommandPrefix>Stop Alarm</CommandPrefix>
+    <CommandPrefix>Bus Alarm</CommandPrefix>
     <Example>search stops for route 452</Example>
 
     <Command Name="StopSearchByRoute">

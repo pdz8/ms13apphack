@@ -127,12 +127,10 @@ namespace BA1
                     BusStop.PinToStart(this.ViewModel.Context);
                     break;
                 case TrackingVM.BtnStartTracking:
-                    LocationTracker.StartTracking();
-                    this.ViewModel.NotifyLeftButton();
+                    this.ViewModel.BeginGeofence();
                     break;
                 case TrackingVM.BtnStopTracking:
-                    LocationTracker.StopTracking();
-                    this.ViewModel.NotifyLeftButton();
+                    this.ViewModel.StopGeofence();
                     break;
             }
         }
@@ -141,7 +139,8 @@ namespace BA1
         {
             if (LocationTracker.IsTracking)
             {
-                LocationTracker.StopTracking();
+                //LocationTracker.StopTracking();
+                this.ViewModel.StopGeofence();
             }
             base.OnBackKeyPress(e);
         }

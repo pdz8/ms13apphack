@@ -19,8 +19,10 @@ namespace BA1
         {
             Context = br;
             Title = Context.Title;
-            //HeaderTitle = Context.Title;
+            //this.Title = "stop results";
+            //HeaderTitle = "bus alarm - " + Context.Title;
             HeaderTitle = "stop results";
+            //this.HeaderTitle = "bus alarm";
             Stops = new ObservableCollection<BusStop>();
 
             StopResultVM.CurrentInstance = this;

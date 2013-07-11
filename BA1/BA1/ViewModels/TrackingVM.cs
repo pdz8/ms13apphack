@@ -25,9 +25,11 @@ namespace BA1
         public TrackingVM(BusStop bs)
         {
             this.Context = bs;
-            //this.HeaderTitle = this.Context.Name;
+            //this.HeaderTitle = "Bus alarm";
+            //this.HeaderTitle = "bus alarm - " + this.Context.Name;
             this.HeaderTitle = this.Context.Name;
-            this.Title = this.Context.Name;
+            //this.Title = this.Context.Name;
+            this.Title = "stop alarm";
             this.StopName = this.Context.Name;
 
             TrackingVM.CurrentInstance = this;
@@ -115,11 +117,38 @@ namespace BA1
             if (this.DistanceLeft.MetersToMiles() <= this.Threshold)
             {
                 LocationTracker.StopTracking();
-                MessageBox.Show("Your stop is coming up soon!", "Non-final alarm", MessageBoxButton.OK);
+                //MessageBox.Show("Your stop is coming up soon!", "Non-final alarm", MessageBoxButton.OK);
+                AlarmHandler.Instance.TriggerAlarm(this.Context);
             }
 
             this.NotifyPropertyChanged("LeftButtonText");
         }
+
+        #region Track control
+
+        /// <summary>
+        /// Initialize all controls for geofencing.
+        /// This should only be called in foreground.
+        /// </summary>
+        public void BeginGeofence()
+        {
+            LocationTracker.StartTracking();
+            this.NotifyLeftButton();
+            AlarmHandler.Instance.PrepareAlarm(this.Context);
+        }
+
+        /// <summary>
+        /// Stop the geofencing.
+        /// This should only be called in foreground.
+        /// </summary>
+        public void StopGeofence()
+        {
+            LocationTracker.StopTracking();
+            this.NotifyLeftButton();
+            AlarmHandler.Instance.ClearAlarms();
+        }
+
+        #endregion
 
         #region Speed tracking
 

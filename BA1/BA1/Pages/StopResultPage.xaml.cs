@@ -68,7 +68,7 @@ namespace BA1
                     ProgressIndicatorHelper.Instance.Push(LoadingEnum.Routes);
                     BusRoute br = await TransitInfo.SearchForRoute(route_name);
                     ProgressIndicatorHelper.Instance.Remove(LoadingEnum.Routes);
-
+                    LocationTracker.RetrieveLocation();
                     if (br != null)
                     {
                         this.ViewModel = new StopResultVM(br);

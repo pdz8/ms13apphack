@@ -35,6 +35,7 @@ namespace BA1
                     PanoPage.CurrentInstance.Dispatcher.BeginInvoke(() =>
                         {
                             ProgressIndicatorHelper.Instance.Remove(LoadingEnum.Location);
+                            BusStop.NotifyAllDistances();
                         });
                 }
                 if (StopResultPage.CurrentInstance != null && StopResultVM.CurrentInstance != null)
@@ -42,6 +43,7 @@ namespace BA1
                     StopResultPage.CurrentInstance.Dispatcher.BeginInvoke(() => 
                         { 
                             StopResultVM.CurrentInstance.UpdateFromLocation();
+                            BusStop.NotifyAllDistances();
                         });
                 }
                 if (TrackingPage.CurrentInstance != null && TrackingVM.CurrentInstance != null)

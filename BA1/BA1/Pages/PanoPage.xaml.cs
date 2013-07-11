@@ -73,7 +73,7 @@ namespace BA1
                 
                 // Find location
                 ProgressIndicatorHelper.Instance.Push(LoadingEnum.Location);
-                LocationTracker.RetrieveLocation();;
+                LocationTracker.RetrieveLocation();
 
                 // Setup speech recognition
                 await VoiceHelper.InitializeSpeech();
@@ -124,6 +124,15 @@ namespace BA1
         {
             this.Focus();
 
+            // Blank route
+            if (this.RouteSearchBox.Text == EmptyTextBox || 
+                string.IsNullOrWhiteSpace(this.RouteSearchBox.Text))
+            {
+                MessageBox.Show("Please enter the number of a bus route in your area.",
+                    "No input", MessageBoxButton.OK);
+                return;
+            }
+
             ProgressIndicatorHelper.Instance.Push(LoadingEnum.Routes);
             var br = await TransitInfo.SearchForRoute(this.RouteSearchBox.Text);
             ProgressIndicatorHelper.Instance.Remove(LoadingEnum.Routes);
@@ -158,7 +167,7 @@ namespace BA1
             base.OnBackKeyPress(e);
         }
 
-        private const string EmptyTextBox = "Search via route #";
+        private const string EmptyTextBox = "search routes"; //"search via route #";
         private void RouteSearchBox_GotFocus(object sender, RoutedEventArgs e)
         {
             this.IsSearchFocused = true;

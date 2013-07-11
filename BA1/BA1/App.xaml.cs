@@ -4,6 +4,8 @@ using System.Resources;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Navigation;
+using System.Windows.Media;
+
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using BA1.Resources;
@@ -105,10 +107,13 @@ namespace BA1
             }
         }
 
-        // Change app's theme (MINE)
+        // Change app's theme (MINE/Jeff Wilcox)
         private void InitializeStyleChanges()
         {
             ThemeManager.ToLightTheme();
+            ThemeManager.SetAccentColor(AccentColor.Teal);
+            //ThemeManager.SetAccentColor(AccentColor.O2Blue);
+            //ThemeManager.SetAccentColor(Color.FromArgb(255, 185, 207, 235));
         }
 
         /// <summary>
