@@ -206,20 +206,17 @@ namespace BA1
             }
         }
 
+        /// <summary>
+        /// Download transit network
+        /// </summary>
+        /// <param name="lat"></param>
+        /// <param name="lon"></param>
+        /// <returns></returns>
         public static async Task<TransitNetworkSearch> GetTransitNetwork(double lat, double lon)
         {
             var response = await DownloadString(rNetworkSearch(lat, lon).ToUri());
             TransitNetworkSearch tns = JsonConvert.DeserializeObject<TransitNetworkSearch>(response);
-            foreach (string id in tns.Routes.Keys)
-            {
-                AppSettings.KnownRoutes.Value[id] = tns.Routes[id];
-            }
-            foreach (string id in tns.Stops.Keys)
-            {
-                AppSettings.KnownStops.Value[id] = tns.Stops[id];
-            }
-            AppSettings.KnownStops.Save();
-            AppSettings.KnownRoutes.Save();
+            TransitNetworkSearch.SaveTNS(tns);
             return tns;
         }
         public static async Task<TransitNetworkSearch> GetTransitNetwork(GeoCoordinate geo)

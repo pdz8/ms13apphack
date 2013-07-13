@@ -171,10 +171,15 @@ namespace BA1
         private void RouteSearchBox_GotFocus(object sender, RoutedEventArgs e)
         {
             this.IsSearchFocused = true;
+
+            // Remove hint string
             if (this.RouteSearchBox.Text == EmptyTextBox)
             {
                 this.RouteSearchBox.Text = "";
             }
+
+            // Highlight all text
+            // TODO
         }
         private void RouteSearchBox_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -226,6 +231,11 @@ namespace BA1
 
         #region Appbar
 
+        /// <summary>
+        /// AppBar Buttons
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void ApplicationBarIconButton_Click(object sender, EventArgs e)
         {
             ApplicationBarIconButton abib = sender as ApplicationBarIconButton;
@@ -249,6 +259,27 @@ namespace BA1
                     break;
                 case "enter":
                     await this.SearchRoutes();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// AppBar Menu Items
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ApplicationBarMenuItem_Click(object sender, EventArgs e)
+        {
+            ApplicationBarMenuItem abmi = sender as ApplicationBarMenuItem;
+            switch (abmi.Text)
+            {
+                case "about":
+
+                    break;
+                case "sync with skydrive":
+                    NavigationService.Navigate(new Uri("/Pages/SkydrivePage.xaml", UriKind.Relative));
+                    break;
+                default:
                     break;
             }
         }

@@ -165,7 +165,8 @@
                                             Text="routes" Click="ApplicationBarIconButton_Click"
                                             />
             <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="about"/>
+                <shell:ApplicationBarMenuItem Text="sync with skydrive" Click="ApplicationBarMenuItem_Click"/>
+                <shell:ApplicationBarMenuItem Text="about" Click="ApplicationBarMenuItem_Click"/>
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>

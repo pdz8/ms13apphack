@@ -8,27 +8,34 @@ using System.Device.Location;
 using System.ComponentModel;
 using Microsoft.Phone.Shell;
 using System.Windows;
+using Newtonsoft.Json;
 
 namespace BA1
 {
+    [JsonObject(MemberSerialization.OptIn)]
     [DataContract]
     public class BusStop : INotifyPropertyChanged
     {
         #region Saved values
 
         [DataMember]
+        [JsonProperty]
         public double Lat { get; set; }
 
         [DataMember]
+        [JsonProperty]
         public double Lon { get; set; }
 
         [DataMember]
+        [JsonProperty]
         public List<string> Route_Ids { get; set; }
 
         [DataMember]
+        [JsonProperty]
         public string Id { get; set; }
 
         [DataMember]
+        [JsonProperty]
         public string Name
         {
             get { return this._Name; }

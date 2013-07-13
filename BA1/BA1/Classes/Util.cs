@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Device.Location;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -146,7 +147,7 @@ namespace BA1
 
         #endregion 
 
-        #region
+        #region Dispatch
 
         public static Dispatcher CurrentDispatcher { private get; set; }
 
@@ -169,6 +170,26 @@ namespace BA1
         }
 
         #endregion
+
+        #region Stream
+
+        /// <summary>
+        /// http://stackoverflow.com/questions/1879395/how-to-generate-a-stream-from-a-string
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static Stream ToStream(this string s)
+        {
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
+        }
+
+        #endregion
+
     }
 
     public static class VoiceHelper
@@ -324,6 +345,8 @@ namespace BA1
                 case LoadingEnum.Stops: return "Getting stops...";
                 case LoadingEnum.Loading: return "Loading...";
                 case LoadingEnum.Routes: return "Finding route...";
+                case LoadingEnum.Uploading: return "Uploading...";
+                case LoadingEnum.Downloading: return "Downloading...";
                 default: return "";
             }
         }
@@ -338,6 +361,8 @@ namespace BA1
         Stops,
         Loading,
         Routes,
+        Uploading,
+        Downloading,
         None
     }
 

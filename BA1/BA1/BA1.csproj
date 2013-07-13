@@ -95,6 +95,7 @@
     </Compile>
     <Compile Include="Classes\AlarmHandler.cs" />
     <Compile Include="Classes\AppSettings.cs" />
+    <Compile Include="Classes\CloudStorage.cs" />
     <Compile Include="Classes\LocationTracker.cs" />
     <Compile Include="Classes\TiltEffect.cs" />
     <Compile Include="Classes\TransitInfo.cs" />
@@ -102,10 +103,15 @@
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="Models\BusStop.cs" />
     <Compile Include="Models\BusRoute.cs" />
+    <Compile Include="Models\FolderData.cs" />
+    <Compile Include="Pages\SkydrivePage.xaml.cs">
+      <DependentUpon>SkydrivePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\TrackingPage.xaml.cs">
       <DependentUpon>TrackingPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\PanoVM.cs" />
+    <Compile Include="ViewModels\SkydriveVM.cs" />
     <Compile Include="ViewModels\StopResultVM.cs" />
     <Compile Include="Pages\PanoPage.xaml.cs">
       <DependentUpon>PanoPage.xaml</DependentUpon>
@@ -130,6 +136,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\SkydrivePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\StopResultPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -140,6 +150,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Fonts\LiveSymbol.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml">
@@ -176,6 +187,12 @@
   <ItemGroup>
     <Reference Include="JeffWilcox.PhoneThemeManager">
       <HintPath>..\packages\PhoneThemeManager.1.4\lib\sl4-windowsphone71\JeffWilcox.PhoneThemeManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Live">
+      <HintPath>..\packages\LiveSDK.5.4\lib\WindowsPhone8\Microsoft.Live.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Live.Controls">
+      <HintPath>..\packages\LiveSDK.5.4\lib\WindowsPhone8\Microsoft.Live.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Phone.Controls.Toolkit">
       <HintPath>..\packages\WPtoolkit.4.2013.06.11\lib\wp8\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
