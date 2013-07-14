@@ -104,6 +104,9 @@
     <Compile Include="Models\BusStop.cs" />
     <Compile Include="Models\BusRoute.cs" />
     <Compile Include="Models\FolderData.cs" />
+    <Compile Include="Pages\AboutPage.xaml.cs">
+      <DependentUpon>AboutPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SkydrivePage.xaml.cs">
       <DependentUpon>SkydrivePage.xaml</DependentUpon>
     </Compile>
@@ -132,6 +135,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="Pages\AboutPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\PanoPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -159,8 +166,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\100x100.png" />
+    <Content Include="Assets\100x100teal.png" />
     <Content Include="Assets\AlignmentGrid.png" />
     <Resource Include="Images\checkerflag.png" />
+    <Content Include="Assets\Teal\134x202teal.png" />
+    <Content Include="Assets\Teal\159x159teal.png" />
+    <Content Include="Assets\Teal\336x336teal.png" />
+    <Content Include="Assets\Teal\691x336teal.png" />
+    <Content Include="Assets\Teal\71x110teal.png" />
     <Content Include="Assets\Tiles\134x202.png" />
     <Content Include="Assets\Tiles\159x159.png" />
     <Content Include="Assets\Tiles\336x336.png" />

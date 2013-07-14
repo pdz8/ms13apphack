@@ -274,7 +274,7 @@ namespace BA1
             switch (abmi.Text)
             {
                 case "about":
-
+                    NavigationService.Navigate(new Uri("/Pages/AboutPage.xaml", UriKind.Relative));
                     break;
                 case "sync with skydrive":
                     NavigationService.Navigate(new Uri("/Pages/SkydrivePage.xaml", UriKind.Relative));

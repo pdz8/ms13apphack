@@ -126,8 +126,11 @@ namespace BA1.Pages
             try
             {
                 await CloudStorage.RestoreFromSkydrive();
-                this.ViewModel.NotifyNums();
                 ProgressIndicatorHelper.Instance.Remove(LoadingEnum.Downloading);
+                this.ViewModel.NotifyNums();
+                RecentStopsQueue.Refresh();
+                await TransitInfo.RefreshRouteIDsAsync();
+                PanoVM.Instance.UpdateSuggestions();
                 MessageBox.Show("Downloaded all stops and routes from Skydrive to local storage", "Success", MessageBoxButton.OK);
             }
             catch (Exception exc)
@@ -166,6 +169,8 @@ namespace BA1.Pages
 
             // Change numbers
             this.ViewModel.NotifyNums();
+            PanoVM.Instance.UpdateSuggestions();
+            RecentStopsQueue.Refresh();
         }
     }
 }
