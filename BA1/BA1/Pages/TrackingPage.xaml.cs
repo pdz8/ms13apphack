@@ -142,6 +142,9 @@ namespace BA1
                 //LocationTracker.StopTracking();
                 this.ViewModel.StopGeofence();
             }
+
+            AppSettings.AlarmThresholds.Save();
+
             base.OnBackKeyPress(e);
         }
 

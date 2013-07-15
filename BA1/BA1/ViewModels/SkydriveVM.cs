@@ -89,10 +89,16 @@ namespace BA1
         /// </summary>
         public bool LiveButtonEnabled
         {
-            get { return this.Client != null; }
+            get { return this.Client != null && this._liveButtonEnabled; }
+            set
+            {
+                this._liveButtonEnabled = value;
+                this.NotifyPropertyChanged("LiveButtonEnabled");
+            }
         }
 
         private LiveConnectClient _client;
+        private bool _liveButtonEnabled = true;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void NotifyPropertyChanged(String propertyName)

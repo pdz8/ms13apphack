@@ -40,7 +40,7 @@ namespace BA1.Pages
                 case "Suggest Changes":
                     EmailComposeTask ect = new EmailComposeTask();
                     ect.To = "zieskeapps@yahoo.com";
-                    ect.Subject = String.Format("Unit Converter");
+                    ect.Subject = String.Format("Bus Alarm");
                     ect.Show();
                     break;
                 default:

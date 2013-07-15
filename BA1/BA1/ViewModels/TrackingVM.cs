@@ -82,11 +82,26 @@ namespace BA1
         /// </summary>
         public double Threshold
         {
-            get { return AppSettings.AlarmThreshold.Value; }
+            get 
+            { 
+                //return AppSettings.AlarmThreshold.Value; 
+                if (!AppSettings.AlarmThresholds.Value.ContainsKey(this.Context.Id))
+                {
+                    AppSettings.AlarmThresholds.Value[this.Context.Id] = 0.5;
+                }
+                return AppSettings.AlarmThresholds.Value[this.Context.Id];
+            }
             set
             {
-                if (value == AppSettings.AlarmThreshold.Value) return;
-                AppSettings.AlarmThreshold.UpdateSave(value);
+                //if (value == AppSettings.AlarmThreshold.Value) return;
+                //AppSettings.AlarmThreshold.UpdateSave(value);
+                if (AppSettings.AlarmThresholds.Value.ContainsKey(this.Context.Id) &&
+                    AppSettings.AlarmThresholds.Value[this.Context.Id] == value)
+                {
+                    return;
+                }
+                AppSettings.AlarmThresholds.Value[this.Context.Id] = value;
+                //AppSettings.AlarmThresholds.Save();
                 NotifyPropertyChanged("Threshold");
                 NotifyPropertyChanged("ThresholdString");
             }

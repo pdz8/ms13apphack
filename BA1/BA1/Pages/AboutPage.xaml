@@ -76,6 +76,22 @@
                                      NavigateUri="http://james.newtonking.com/projects/json-net.aspx"
                                      TargetName="_blank"/>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource PhoneTextNormalStyle}"
+                               Text="Clock ring alarm by:"
+                               VerticalAlignment="Bottom"/>
+                    <HyperlinkButton Content="joedeshon"
+                                     NavigateUri="http://www.freesound.org/people/joedeshon/sounds/78562/"
+                                     TargetName="_blank"/>
+                </StackPanel>
+                <!--<StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource PhoneTextNormalStyle}"
+                               Text="Published through:"
+                               VerticalAlignment="Bottom"/>
+                    <TextBlock Text="Alex Leung"
+                               Style="{StaticResource PhoneTextAccentStyle}"
+                               />
+                </StackPanel>-->
                 <TextBlock Style="{StaticResource PhoneTextGroupHeaderStyle}"
                            Text="feedback"
                            Margin="12,24,12,0"/>

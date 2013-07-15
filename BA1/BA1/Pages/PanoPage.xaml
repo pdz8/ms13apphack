@@ -92,7 +92,7 @@
                 </Grid.ColumnDefinitions>
                 <toolkit:AutoCompleteBox Name="RouteSearchBox" 
 									     InputScope="Number"
-									     Text="542"
+									     Text=""
 									     ItemsSource="{Binding Suggestions}" 
                                          GotFocus="RouteSearchBox_GotFocus" 
                                          LostFocus="RouteSearchBox_LostFocus"
@@ -165,7 +165,7 @@
                                             Text="routes" Click="ApplicationBarIconButton_Click"
                                             />
             <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="sync with skydrive" Click="ApplicationBarMenuItem_Click"/>
+                <shell:ApplicationBarMenuItem Text="skydrive sync" Click="ApplicationBarMenuItem_Click"/>
                 <shell:ApplicationBarMenuItem Text="about" Click="ApplicationBarMenuItem_Click"/>
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>

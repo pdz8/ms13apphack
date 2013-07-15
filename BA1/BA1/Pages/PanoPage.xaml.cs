@@ -111,6 +111,11 @@ namespace BA1
         /// </summary>
         private bool IsSearchFocused = false;
 
+        /// <summary>
+        /// Is the search box going to lose focus?
+        /// </summary>
+        private bool FirstSearch = true;
+
         private async void FindStopButton_Click(object sender, RoutedEventArgs e)
         {
             await SearchRoutes();
@@ -143,6 +148,7 @@ namespace BA1
                 return;
             }
 
+            this.RouteSearchBox.Text = "";
             if (this.SpacingPanel.Height == spacerMaxHeight)
             {
                 this.SetSearchBarVisibility(Visibility.Collapsed);
@@ -183,6 +189,12 @@ namespace BA1
         }
         private void RouteSearchBox_LostFocus(object sender, RoutedEventArgs e)
         {
+            if (this.FirstSearch)
+            {
+                this.FirstSearch = false;
+                return;
+            }
+
             this.IsSearchFocused = false;
             if (string.IsNullOrWhiteSpace(this.RouteSearchBox.Text))
             {
@@ -277,6 +289,7 @@ namespace BA1
                     NavigationService.Navigate(new Uri("/Pages/AboutPage.xaml", UriKind.Relative));
                     break;
                 case "sync with skydrive":
+                case "skydrive sync":
                     NavigationService.Navigate(new Uri("/Pages/SkydrivePage.xaml", UriKind.Relative));
                     break;
                 default:

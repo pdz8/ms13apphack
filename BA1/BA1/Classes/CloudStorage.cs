@@ -76,7 +76,10 @@ namespace BA1
         public static async Task BackupToSkydrive()
         {
             // Group by agency
-            var knownTNS = new TransitNetworkSearch(AppSettings.KnownRoutes.Value, AppSettings.KnownStops.Value);
+            var knownTNS = new TransitNetworkSearch(
+                AppSettings.KnownRoutes.Value, 
+                AppSettings.KnownStops.Value,
+                AppSettings.AlarmThresholds.Value);
             Dictionary<string, TransitNetworkSearch> agencies = TransitNetworkSearch.GroupByAgency(knownTNS);
             //if (agencies.Count == 0) return;
 

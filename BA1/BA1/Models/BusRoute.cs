@@ -60,6 +60,10 @@ namespace BA1
         [JsonProperty]
         public Dictionary<string, BusStop> Stops { get; set; }
 
+        [DataMember]
+        [JsonProperty]
+        public Dictionary<string, double> Thresholds { get; set; }
+
         /// <summary>
         /// Name of agency associated with TNS if applicable
         /// </summary>
@@ -84,6 +88,15 @@ namespace BA1
             this.Stops = stops;
         }
 
+        public TransitNetworkSearch(
+            Dictionary<string, BusRoute> routes,
+            Dictionary<string, BusStop> stops,
+            Dictionary<string, double> thresholds)
+            : this(routes, stops)
+        {
+            this.Thresholds = thresholds;
+        }
+
         #endregion
 
         /// <summary>
@@ -94,7 +107,10 @@ namespace BA1
         public static Dictionary<string, TransitNetworkSearch> GroupByAgency(TransitNetworkSearch rootTNS)
         {
             Dictionary<string, TransitNetworkSearch> retval = new Dictionary<string, TransitNetworkSearch>();
-            if (rootTNS == null || rootTNS.Routes == null || rootTNS.Stops == null) return retval;
+            if (rootTNS == null || 
+                rootTNS.Routes == null || 
+                rootTNS.Stops == null || 
+                rootTNS.Thresholds == null) return retval;
 
             var routeGroups = rootTNS.Routes.Values.GroupBy(rt => rt.Agency);
             foreach (var rg in routeGroups)
@@ -102,7 +118,8 @@ namespace BA1
                 TransitNetworkSearch tns = new TransitNetworkSearch()
                 {
                     Routes = new Dictionary<string, BusRoute>(),
-                    Stops = new Dictionary<string, BusStop>()
+                    Stops = new Dictionary<string, BusStop>(),
+                    Thresholds = new Dictionary<string, double>()
                 };
                 foreach (BusRoute route in rg)
                 {
@@ -112,6 +129,10 @@ namespace BA1
                         if (rootTNS.Stops.ContainsKey(stop_id) && !tns.Stops.ContainsKey(stop_id))
                         {
                             tns.Stops.Add(stop_id, rootTNS.Stops[stop_id]);
+                            if (rootTNS.Thresholds.ContainsKey(stop_id) && !tns.Thresholds.ContainsKey(stop_id))
+                            {
+                                tns.Thresholds.Add(stop_id, rootTNS.Thresholds[stop_id]);
+                            }
                         }
                     }
                 }
@@ -127,18 +148,33 @@ namespace BA1
         /// <param name="tns"></param>
         public static void SaveTNS(TransitNetworkSearch tns)
         {
-            if (tns == null || tns.Routes == null || tns.Stops == null) return;
+            if (tns == null) return;
 
-            foreach (string id in tns.Routes.Keys)
+            if (tns.Routes != null)
             {
-                AppSettings.KnownRoutes.Value[id] = tns.Routes[id];
+                foreach (string id in tns.Routes.Keys)
+                {
+                    AppSettings.KnownRoutes.Value[id] = tns.Routes[id];
+                }
+                AppSettings.KnownRoutes.Save();
             }
-            foreach (string id in tns.Stops.Keys)
+            if (tns.Stops != null)
             {
-                AppSettings.KnownStops.Value[id] = tns.Stops[id];
+                foreach (string id in tns.Stops.Keys)
+                {
+                    AppSettings.KnownStops.Value[id] = tns.Stops[id];
+                }
+                AppSettings.KnownStops.Save();
             }
-            AppSettings.KnownStops.Save();
-            AppSettings.KnownRoutes.Save();
+            if (tns.Thresholds != null)
+            {
+                foreach (string id in tns.Thresholds.Keys)
+                {
+                    AppSettings.AlarmThresholds.Value[id] = tns.Thresholds[id];
+                }
+                AppSettings.AlarmThresholds.Save();
+            }
         }
+
     }
 }

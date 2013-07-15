@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using System.Device.Location;
 using System.Windows.Threading;
+using System.Windows.Controls;
 
 namespace BA1
 {
@@ -208,7 +209,12 @@ namespace BA1
         /// <summary>
         /// Most recent position given to this
         /// </summary>
-        private GeoCoordinate MostRecentPosition = null;
+        private GeoCoordinate LastPosition = null;
+
+        /// <summary>
+        /// Time the most recent position was recorded at
+        /// </summary>
+        private DateTime LastTime;
 
         /// <summary>
         /// Total distance traveled since creation (meters)
@@ -232,7 +238,7 @@ namespace BA1
         /// <summary>
         /// Minutes since start
         /// </summary>
-        public double TimeElapsed
+        public double TotalTimeElapsed
         {
             get { return this.HasGottenUpdated ? (DateTime.Now - this.StartTime).TotalMinutes : -1; }
         }
@@ -242,7 +248,7 @@ namespace BA1
         /// </summary>
         public double AverageSpeed
         {
-            get { return this.DistanceTraveled > 0 && this.HasGottenUpdated ? this.DistanceTraveled / this.TimeElapsed : -1; }
+            get { return this.DistanceTraveled > 0 && this.HasGottenUpdated ? this.DistanceTraveled / this.TotalTimeElapsed : -1; }
         }
 
         /// <summary>
@@ -250,7 +256,7 @@ namespace BA1
         /// </summary>
         private double DistanceLeft
         {
-            get { return this.HasGottenUpdated ? Destination.GetDistanceTo(this.MostRecentPosition) : -1; }
+            get { return this.HasGottenUpdated ? Destination.GetDistanceTo(this.LastPosition) : -1; }
         }
 
         /// <summary>
@@ -259,6 +265,57 @@ namespace BA1
         public double EstimatedTimeLeft
         {
             get { return this.HasGottenUpdated ? this.DistanceLeft / this.AverageSpeed : -1; }
+        }
+
+        #endregion
+
+        #region Current speed
+
+        /// <summary>
+        /// How many minutes should the threshold be
+        /// </summary>
+        private const double THRESHOLD_FACTOR = 1.5;
+
+        /// <summary>
+        /// Current speed in m/s
+        /// </summary>
+        public double InstataneousSpeed { get; private set; }
+
+        /// <summary>
+        /// Recommended threshold in miles
+        /// </summary>
+        public double RecommendedThreshold
+        {
+            get
+            {
+                if (this.InstataneousSpeed <= 0) return 0;
+
+                double retval = this.InstataneousSpeed * THRESHOLD_FACTOR * 60;
+                retval = retval.MetersToMiles();
+
+                return retval;
+            }
+        }
+
+        /// <summary>
+        /// Get threshold that corresponds to slider precision
+        /// </summary>
+        /// <param name="slider"></param>
+        /// <returns></returns>
+        public double GetSliderThreshold(Slider slider)
+        {
+            if (this.RecommendedThreshold >= slider.Maximum) return slider.Maximum;
+            if (this.RecommendedThreshold <= slider.Minimum) return slider.Minimum;
+
+            double smallChange = Math.Abs(slider.SmallChange);
+            double retval = slider.Minimum;
+
+            do
+            {
+                retval += smallChange;
+            } while (this.RecommendedThreshold > retval && retval < slider.Maximum);
+
+            return retval;
         }
 
         #endregion
@@ -274,22 +331,39 @@ namespace BA1
             this.HasGottenUpdated = false;
         }
 
+        /// <summary>
+        /// Update the current position
+        /// </summary>
+        /// <param name="pos"></param>
         public void AddPosition(GeoCoordinate pos)
         {
-            if (this.MostRecentPosition == null)
+            // Initialize last position
+            if (this.LastPosition == null)
             {
-                this.MostRecentPosition = pos;
+                this.LastPosition = pos;
                 this.StartTime = DateTime.Now;
                 return;
             }
 
-            this.DistanceTraveled += this.MostRecentPosition.GetDistanceTo(pos);
+            // Current speed
+            double secondsSinceLast = (DateTime.Now - this.LastTime).TotalSeconds;
+            if (secondsSinceLast > 0)
+            {
+                this.InstataneousSpeed = this.LastPosition.GetDistanceTo(pos) / secondsSinceLast;
+            }
+
+            // Average speed
+            this.DistanceTraveled += this.LastPosition.GetDistanceTo(pos);
             if (!this.HasGottenUpdated && 
                 (DateTime.Now - this.StartTime).TotalSeconds >= 1 &&
                 this.DistanceTraveled > 0)
             {
                 this.HasGottenUpdated = true;
             }
+
+            // Update LastPosition
+            this.LastPosition = pos;
+            this.LastTime = DateTime.Now;
         }
     }
 

@@ -97,6 +97,7 @@ namespace BA1.Pages
         private async void BackupBtn_Click(object sender, RoutedEventArgs e)
         {
             ProgressIndicatorHelper.Instance.Push(LoadingEnum.Uploading);
+            this.ViewModel.LiveButtonEnabled = false;
             try
             {
                 await CloudStorage.BackupToSkydrive();
@@ -112,6 +113,7 @@ namespace BA1.Pages
             }
             finally
             {
+                this.ViewModel.LiveButtonEnabled = true;
             }
         }
 
@@ -123,6 +125,7 @@ namespace BA1.Pages
         private async void RestoreBtn_Click(object sender, RoutedEventArgs e)
         {
             ProgressIndicatorHelper.Instance.Push(LoadingEnum.Downloading);
+            this.ViewModel.LiveButtonEnabled = false;
             try
             {
                 await CloudStorage.RestoreFromSkydrive();
@@ -140,6 +143,7 @@ namespace BA1.Pages
             }
             finally
             {
+                this.ViewModel.LiveButtonEnabled = true;
             }
         }
 
@@ -161,11 +165,13 @@ namespace BA1.Pages
             AppSettings.KnownStops.Value = new Dictionary<string, BusStop>();
             AppSettings.KnownRoutes.Value = new Dictionary<string, BusRoute>();
             AppSettings.RecentIds.Value = new LinkedList<string>();
+            AppSettings.AlarmThresholds.Reset();
 
             // Save changes
             AppSettings.KnownRoutes.Save();
             AppSettings.KnownStops.Save();
             AppSettings.RecentIds.Save();
+            AppSettings.AlarmThresholds.Save();
 
             // Change numbers
             this.ViewModel.NotifyNums();

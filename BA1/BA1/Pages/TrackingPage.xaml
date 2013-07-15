@@ -118,6 +118,9 @@
                             <TextBlock Text="Distance left: "
                                        FontSize="{StaticResource PhoneFontSizeLarge}"
                                        VerticalAlignment="Bottom"/>
+                            <!--<TextBlock Text="distance left"
+                                       Style="{StaticResource PhoneTextGroupHeaderStyle}"
+                                       VerticalAlignment="Bottom" Margin="0"/>-->
                             <TextBlock Text="{Binding DistanceString}"
                                        Foreground="{StaticResource PhoneAccentBrush}"
                                        FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
@@ -141,16 +144,21 @@
                                        FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
                         </StackPanel>-->
                         <Rectangle Height="48"/>
+                        <!--<Rectangle Height="24"/>-->
                         <StackPanel Orientation="Vertical">
                             <TextBlock FontSize="{StaticResource PhoneFontSizeLarge}"
                                        Text="Alarm threshold: "
                                        VerticalAlignment="Bottom"/>
+                            <!--<TextBlock Text="alarm threshold"
+                                       Style="{StaticResource PhoneTextGroupHeaderStyle}"
+                                       VerticalAlignment="Bottom" Margin="0"/>-->
                             <TextBlock Text="{Binding ThresholdString}"
                                        Foreground="{StaticResource PhoneAccentBrush}"
                                        FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
                         </StackPanel>
                         <Slider Maximum="1" Minimum="0.1"
-                                Value="{Binding Threshold, Mode=TwoWay}"/>
+                                Value="{Binding Threshold, Mode=TwoWay}" 
+                                Margin="0,0,0,-24"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>

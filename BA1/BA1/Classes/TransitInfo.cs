@@ -34,8 +34,10 @@ namespace BA1
             (RouteIDs ?? (RouteIDs = new Dictionary<string,List<string>>())).Clear();
             foreach (BusRoute br in AppSettings.KnownRoutes.Value.Values)
             {
-                if (!RouteIDs.ContainsKey(br.Name)) 
+                if (!RouteIDs.ContainsKey(br.Name))
+                {
                     RouteIDs.Add(br.Name, new List<string>());
+                }
                 RouteIDs[br.Name].Add(br.Id);
             }
         }

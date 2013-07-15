@@ -25,6 +25,7 @@ namespace BA1
             LocationConsent = new SavedSetting<bool>("cons", false);
 
             AlarmThreshold = new SavedSetting<double>("radi", 0.5);
+            AlarmThresholds = new SavedSetting<Dictionary<string, double>>("thre");
         }
 
         public static SavedSetting<Dictionary<string, BusRoute>> KnownRoutes { get; private set; }
@@ -40,6 +41,7 @@ namespace BA1
         /// Geofence radius
         /// </summary>
         public static SavedSetting<double> AlarmThreshold { get; private set; }
+        public static SavedSetting<Dictionary<string, double>> AlarmThresholds { get; private set; }
     }
 
     /// <summary>
@@ -83,6 +85,14 @@ namespace BA1
         public T Load()
         {
             return this.Load(new T());
+        }
+
+        /// <summary>
+        /// Reset using default constructor
+        /// </summary>
+        public void Reset()
+        {
+            this.Value = new T();
         }
 
         /// <summary>
