@@ -17,6 +17,9 @@ namespace BA1
     /// </summary>
     public static class Util
     {
+        public const string MapApplicationID = "09e85e7f-9128-4dca-8979-dd893b9ac3e7";
+        public const string MapAuthenticationToken = "G7attB_FwgHPovVn7d-Usw";
+
         #region Lowercase uppercase
 
         private static readonly string[] UpperWords = new string[] { "NE", "SW", "SE", "NW" };

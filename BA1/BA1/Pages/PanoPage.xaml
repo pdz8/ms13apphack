@@ -96,7 +96,7 @@
 									     ItemsSource="{Binding Suggestions}" 
                                          GotFocus="RouteSearchBox_GotFocus" 
                                          LostFocus="RouteSearchBox_LostFocus"
-                                         Grid.Column="0" Grid.ColumnSpan="2"
+                                         Grid.Column="0" Grid.ColumnSpan="2" 
 									     />
                 <Grid Name="SearchButtonGrid"
                       Tap="SearchButtonGrid_Tap"

@@ -142,6 +142,8 @@ namespace BA1
         /// <param name="e"></param>
         private void ResultsMap_Loaded(object sender, RoutedEventArgs e)
         {
+            Microsoft.Phone.Maps.MapsSettings.ApplicationContext.ApplicationId = Util.MapApplicationID;
+            Microsoft.Phone.Maps.MapsSettings.ApplicationContext.AuthenticationToken = Util.MapAuthenticationToken;
             System.Threading.Thread.Sleep(500);
             if (!this.startup && this.ViewModel != null)
             {
