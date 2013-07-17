@@ -42,7 +42,8 @@ namespace BA1
                 if (StopResultPage.CurrentInstance != null && StopResultVM.CurrentInstance != null)
                 {
                     StopResultPage.CurrentInstance.Dispatcher.BeginInvoke(() => 
-                        { 
+                        {
+                            ProgressIndicatorHelper.Instance.Remove(LoadingEnum.Location);
                             StopResultVM.CurrentInstance.UpdateFromLocation();
                             BusStop.NotifyAllDistances();
                         });
@@ -51,6 +52,7 @@ namespace BA1
                 {
                     TrackingPage.CurrentInstance.Dispatcher.BeginInvoke(() =>
                         {
+                            ProgressIndicatorHelper.Instance.Remove(LoadingEnum.Location);
                             TrackingVM.CurrentInstance.UpdateFromLocation();
                         });
                 }
@@ -79,7 +81,7 @@ namespace BA1
         {
             GPS = new Geolocator();
             GPS.DesiredAccuracy = PositionAccuracy.High;
-            GPS.DesiredAccuracyInMeters = 100;
+            GPS.DesiredAccuracyInMeters = 50;
             //GPS.MovementThreshold = 100;
             GPS.ReportInterval = 1000;
 
@@ -116,6 +118,7 @@ namespace BA1
         public static void RetrieveLocation()
         {
             if (TrackState == TrackingEnum.Tracking) return;
+            if (TrackState == TrackingEnum.SingleUse) return;
 
             TrackState = TrackingEnum.SingleUse;
 
@@ -199,12 +202,7 @@ namespace BA1
     /// </summary>
     public class SpeedTracker
     {
-        #region Properties
-
-        /// <summary>
-        /// Stop location
-        /// </summary>
-        public GeoCoordinate Destination { get; private set; }
+        #region Current speed
 
         /// <summary>
         /// Most recent position given to this
@@ -215,61 +213,6 @@ namespace BA1
         /// Time the most recent position was recorded at
         /// </summary>
         private DateTime LastTime;
-
-        /// <summary>
-        /// Total distance traveled since creation (meters)
-        /// </summary>
-        public double DistanceTraveled { get; private set; }
-
-        /// <summary>
-        /// Time at which first usable position comes it
-        /// </summary>
-        private DateTime StartTime;
-
-        /// <summary>
-        /// Has received more than 1 location
-        /// </summary>
-        public bool HasGottenUpdated { get; private set; }
-
-        #endregion
-
-        #region Getters
-
-        /// <summary>
-        /// Minutes since start
-        /// </summary>
-        public double TotalTimeElapsed
-        {
-            get { return this.HasGottenUpdated ? (DateTime.Now - this.StartTime).TotalMinutes : -1; }
-        }
-
-        /// <summary>
-        /// Average speed in meters / min
-        /// </summary>
-        public double AverageSpeed
-        {
-            get { return this.DistanceTraveled > 0 && this.HasGottenUpdated ? this.DistanceTraveled / this.TotalTimeElapsed : -1; }
-        }
-
-        /// <summary>
-        /// Distance left in meters
-        /// </summary>
-        private double DistanceLeft
-        {
-            get { return this.HasGottenUpdated ? Destination.GetDistanceTo(this.LastPosition) : -1; }
-        }
-
-        /// <summary>
-        /// Estimate time left in minutes
-        /// </summary>
-        public double EstimatedTimeLeft
-        {
-            get { return this.HasGottenUpdated ? this.DistanceLeft / this.AverageSpeed : -1; }
-        }
-
-        #endregion
-
-        #region Current speed
 
         /// <summary>
         /// How many minutes should the threshold be
@@ -317,18 +260,25 @@ namespace BA1
 
             return retval;
         }
+        public double GetSliderThreshold()
+        {
+            return this.GetSliderThreshold(this.SliderControl);
+        }
 
         #endregion
 
         /// <summary>
+        /// The slider that is referenced to get limits
+        /// </summary>
+        public Slider SliderControl { get; set; }
+
+        /// <summary>
         /// Create new speed tracker
         /// </summary>
-        /// <param name="dest">stop location</param>
-        public SpeedTracker(GeoCoordinate dest)
+        /// <param name="slider">Slider</param>
+        public SpeedTracker(Slider slider)
         {
-            this.DistanceTraveled = 0;
-            this.Destination = dest;
-            this.HasGottenUpdated = false;
+            this.SliderControl = slider;
         }
 
         /// <summary>
@@ -341,7 +291,6 @@ namespace BA1
             if (this.LastPosition == null)
             {
                 this.LastPosition = pos;
-                this.StartTime = DateTime.Now;
                 return;
             }
 
@@ -350,15 +299,6 @@ namespace BA1
             if (secondsSinceLast > 0)
             {
                 this.InstataneousSpeed = this.LastPosition.GetDistanceTo(pos) / secondsSinceLast;
-            }
-
-            // Average speed
-            this.DistanceTraveled += this.LastPosition.GetDistanceTo(pos);
-            if (!this.HasGottenUpdated && 
-                (DateTime.Now - this.StartTime).TotalSeconds >= 1 &&
-                this.DistanceTraveled > 0)
-            {
-                this.HasGottenUpdated = true;
             }
 
             // Update LastPosition

@@ -21,6 +21,16 @@ namespace BA1
         /// </summary>
         public TrackingVM ViewModel { get; private set; }
 
+        /// <summary>
+        /// First startup
+        /// </summary>
+        private bool startup = true;
+
+        /// <summary>
+        /// Do we need to rezoom the map?
+        /// </summary>
+        public bool ReZoomMap = true;
+
         #endregion
 
         #region Initialization
@@ -37,6 +47,10 @@ namespace BA1
         /// </summary>
         public static TrackingPage CurrentInstance { get; private set; }
 
+        /// <summary>
+        /// Execute upon arriving from navigation
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
@@ -44,16 +58,29 @@ namespace BA1
             // Update the current dispatcher
             Util.CurrentDispatcher = this.Dispatcher;
 
+            // Create view model
             string stop_id;
-            if (NavigationContext.QueryString.TryGetValue("stop_id", out stop_id))
+            if (NavigationContext.QueryString.TryGetValue("stop_id", out stop_id) && this.startup)
             {
+                // Initialize ViewModel
                 ViewModel = new TrackingVM(AppSettings.KnownStops.Value[stop_id]);
                 this.DataContext = this.ViewModel;
                 
+                // Initialize progress bar
                 InitializeProgress();
+
+                // Get location if necessary
+                if (LocationTracker.Location == null)
+                {
+                    ProgressIndicatorHelper.Instance.Push(LoadingEnum.Location);
+                    LocationTracker.RetrieveLocation();
+                }
 
                 // Update recent stops
                 RecentStopsQueue.Push(ViewModel.Context);
+
+                // Preven further initialization
+                this.startup = false;
             }
 
             // Animate app bar
@@ -72,11 +99,25 @@ namespace BA1
             SystemTray.ForegroundColor = Colors.Black;
         }
 
+        /// <summary>
+        /// Called when map loads
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TrackMap_Loaded(object sender, RoutedEventArgs e)
         {
             System.Threading.Thread.Sleep(500);
+            this.CenterAndZoom();
+        }
+
+        /// <summary>
+        /// Center and zoom the map on location and the destination
+        /// </summary>
+        public void CenterAndZoom()
+        {
             if (LocationTracker.Location != null && this.ViewModel != null)
             {
+                this.ReZoomMap = false;
                 this.TrackMap.SetView(LocationRectangle.CreateBoundingRectangle(
                     LocationTracker.Location, this.ViewModel.Context.Location));
             }
@@ -135,6 +176,10 @@ namespace BA1
             }
         }
 
+        /// <summary>
+        /// Exit and stop tracking
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
         {
             if (LocationTracker.IsTracking)
@@ -146,6 +191,16 @@ namespace BA1
             AppSettings.AlarmThresholds.Save();
 
             base.OnBackKeyPress(e);
+        }
+
+        /// <summary>
+        /// Toggle manual and automatic threshold updating
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ManualToggleBlock_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            this.ViewModel.ManualEnabled = !this.ViewModel.ManualEnabled;
         }
 
     }

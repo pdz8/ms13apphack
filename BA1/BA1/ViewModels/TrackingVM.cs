@@ -35,7 +35,7 @@ namespace BA1
             TrackingVM.CurrentInstance = this;
 
             // Start speed tracker
-            this.SpeedTracker = new SpeedTracker(this.Context.Location);
+            this.SpeedTracker = new SpeedTracker(TrackingPage.CurrentInstance.ThresholdSlider);
             if (LocationTracker.HasLocation)
             {
                 this.SpeedTracker.AddPosition(LocationTracker.Location);
@@ -54,7 +54,7 @@ namespace BA1
         /// </summary>
         public GeoCoordinate MyLocation
         {
-            get { return LocationTracker.Location ?? new GeoCoordinate(); }
+            get { return LocationTracker.Location ?? new GeoCoordinate(47.64324, -122.14196); }
         }
 
         /// <summary>
@@ -77,40 +77,6 @@ namespace BA1
             get { return DistanceLeft.MetersToMiles().ToMilesString(); }
         }
 
-        /// <summary>
-        /// Threshold that triggers the alarm (miles)
-        /// </summary>
-        public double Threshold
-        {
-            get 
-            { 
-                //return AppSettings.AlarmThreshold.Value; 
-                if (!AppSettings.AlarmThresholds.Value.ContainsKey(this.Context.Id))
-                {
-                    AppSettings.AlarmThresholds.Value[this.Context.Id] = 0.5;
-                }
-                return AppSettings.AlarmThresholds.Value[this.Context.Id];
-            }
-            set
-            {
-                //if (value == AppSettings.AlarmThreshold.Value) return;
-                //AppSettings.AlarmThreshold.UpdateSave(value);
-                if (AppSettings.AlarmThresholds.Value.ContainsKey(this.Context.Id) &&
-                    AppSettings.AlarmThresholds.Value[this.Context.Id] == value)
-                {
-                    return;
-                }
-                AppSettings.AlarmThresholds.Value[this.Context.Id] = value;
-                //AppSettings.AlarmThresholds.Save();
-                NotifyPropertyChanged("Threshold");
-                NotifyPropertyChanged("ThresholdString");
-            }
-        }
-        public string ThresholdString
-        {
-            get { return Threshold.ToMilesString(); }
-        }
-
         #endregion
 
         /// <summary>
@@ -119,8 +85,19 @@ namespace BA1
         /// <param name="location"></param>
         public void UpdateFromLocation()
         {
+            // Rezoom map
+            if (TrackingPage.CurrentInstance.ReZoomMap)
+            {
+                TrackingPage.CurrentInstance.CenterAndZoom();
+            }
+
             // Update speed tracker
             this.SpeedTracker.AddPosition(LocationTracker.Location);
+            if (!this.ManualEnabled)
+            {
+                this.NotifyPropertyChanged("Threshold");
+                this.NotifyPropertyChanged("ThresholdString");
+            }
 
             // Notify properties
             this.NotifyPropertyChanged("MyLocation");
@@ -129,6 +106,7 @@ namespace BA1
             this.NotifyPropertyChanged("EstimatedTimeString");
             this.NotifyPropertyChanged("AverageSpeedString");
 
+            // Raise alarm
             if (this.DistanceLeft.MetersToMiles() <= this.Threshold)
             {
                 LocationTracker.StopTracking();
@@ -165,21 +143,83 @@ namespace BA1
 
         #endregion
 
-        #region Speed tracking
+        #region Auto threshold
 
         /// <summary>
         /// Helps determine estimated time left
         /// </summary>
         public SpeedTracker SpeedTracker { get; private set; }
 
-        public string EstimatedTimeString
+        /// <summary>
+        /// Is the threshold set automatically or manually?
+        /// </summary>
+        public bool ManualEnabled
         {
-            get { return SpeedTracker.EstimatedTimeLeft.ToTimeString(); }
+            get { return AppSettings.ManualThresholdEnabled.Value; }
+            set
+            {
+                if (value == AppSettings.ManualThresholdEnabled.Value) return;
+                AppSettings.ManualThresholdEnabled.UpdateSave(value);
+                this.NotifyPropertyChanged("ManualEnabled");
+                this.NotifyPropertyChanged("ManualAutoString");
+                NotifyPropertyChanged("Threshold");
+                NotifyPropertyChanged("ThresholdString");
+            }
         }
 
-        public string AverageSpeedString
+        /// <summary>
+        /// Text to display on manual/auto button
+        /// </summary>
+        public string ManualAutoString
         {
-            get { return (SpeedTracker.AverageSpeed.MetersToMiles() * 60).ToMPHString(); }
+            get
+            {
+                return this.ManualEnabled ? "auto adjust OFF" : "auto adjust ON";
+            }
+        }
+
+        /// <summary>
+        /// Threshold that triggers the alarm (miles)
+        /// </summary>
+        public double Threshold
+        {
+            get
+            {
+                if (this.ManualEnabled)
+                {
+                    if (!AppSettings.AlarmThresholds.Value.ContainsKey(this.Context.Id))
+                    {
+                        AppSettings.AlarmThresholds.Value[this.Context.Id] = 0.5;
+                    }
+                    return AppSettings.AlarmThresholds.Value[this.Context.Id];
+                }
+                else
+                {
+                    return this.SpeedTracker.GetSliderThreshold();
+                }
+            }
+            set
+            {
+                if (this.ManualEnabled)
+                {
+                    if (AppSettings.AlarmThresholds.Value.ContainsKey(this.Context.Id) &&
+                        AppSettings.AlarmThresholds.Value[this.Context.Id] == value)
+                    {
+                        return;
+                    }
+                    AppSettings.AlarmThresholds.Value[this.Context.Id] = value;
+                    NotifyPropertyChanged("Threshold");
+                    NotifyPropertyChanged("ThresholdString");
+                }
+                else
+                {
+
+                }
+            }
+        }
+        public string ThresholdString
+        {
+            get { return Threshold.ToMilesString(); }
         }
 
         #endregion

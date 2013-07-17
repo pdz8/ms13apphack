@@ -145,20 +145,33 @@
                         </StackPanel>-->
                         <Rectangle Height="48"/>
                         <!--<Rectangle Height="24"/>-->
-                        <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
                             <TextBlock FontSize="{StaticResource PhoneFontSizeLarge}"
                                        Text="Alarm threshold: "
                                        VerticalAlignment="Bottom"/>
                             <!--<TextBlock Text="alarm threshold"
                                        Style="{StaticResource PhoneTextGroupHeaderStyle}"
                                        VerticalAlignment="Bottom" Margin="0"/>-->
-                            <TextBlock Text="{Binding ThresholdString}"
-                                       Foreground="{StaticResource PhoneAccentBrush}"
-                                       FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
+                            
                         </StackPanel>
+                        <TextBlock Text="{Binding ThresholdString}"
+                                    Foreground="{StaticResource PhoneAccentBrush}"
+                                    FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
                         <Slider Maximum="1" Minimum="0.1"
                                 Value="{Binding Threshold, Mode=TwoWay}" 
-                                Margin="0,0,0,-24"/>
+                                Margin="0,0,0,-28"
+                                IsEnabled="{Binding ManualEnabled}"
+                                Name="ThresholdSlider"/>
+                        <Rectangle Height="28"/>
+                        <ListBox tilteffect:TiltEffect.IsTiltEnabled="True"
+                                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                 VerticalAlignment="Stretch"
+                                 Margin="-8,-28,0,0">
+                            <TextBlock Text="{Binding ManualAutoString}"
+                                       Style="{StaticResource PhoneTextAccentStyle}"
+                                       Name="ManualToggleBlock"
+                                       Tap="ManualToggleBlock_Tap"/>
+                        </ListBox>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>

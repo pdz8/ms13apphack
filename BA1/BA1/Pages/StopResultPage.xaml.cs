@@ -53,11 +53,12 @@ namespace BA1
 
             if (this.startup)
             {
+                // Initialize progress bar
                 this.InitializeProgress();
                 
+                // Setup ViewModel
                 string route_id;
                 string route_name;
-
                 if (this.NavigationContext.QueryString.TryGetValue("route_id", out route_id))
                 {
                     this.ViewModel = new StopResultVM(AppSettings.KnownRoutes.Value[route_id]);

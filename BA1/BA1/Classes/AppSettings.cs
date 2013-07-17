@@ -26,6 +26,7 @@ namespace BA1
 
             AlarmThreshold = new SavedSetting<double>("radi", 0.5);
             AlarmThresholds = new SavedSetting<Dictionary<string, double>>("thre");
+            ManualThresholdEnabled = new SavedSetting<bool>("mten", false);
         }
 
         public static SavedSetting<Dictionary<string, BusRoute>> KnownRoutes { get; private set; }
@@ -42,6 +43,7 @@ namespace BA1
         /// </summary>
         public static SavedSetting<double> AlarmThreshold { get; private set; }
         public static SavedSetting<Dictionary<string, double>> AlarmThresholds { get; private set; }
+        public static SavedSetting<bool> ManualThresholdEnabled { get; private set; }
     }
 
     /// <summary>
