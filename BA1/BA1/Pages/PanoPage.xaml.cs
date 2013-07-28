@@ -215,6 +215,7 @@ namespace BA1
         {
             if (v == Visibility.Visible && this.SpacingPanel.Height == 0)
             {
+                this.FirstSearch = true;
                 this.ExpandSpacer.Begin();
                 var enterbutton = new ApplicationBarIconButton(new Uri("/Images/next.png", UriKind.Relative))
                 {
@@ -223,7 +224,6 @@ namespace BA1
                 enterbutton.Click += ApplicationBarIconButton_Click;
                 ApplicationBar.Buttons.Clear();
                 ApplicationBar.Buttons.Add(enterbutton);
-
             }
             else if (v == Visibility.Collapsed && this.SpacingPanel.Height == spacerMaxHeight)
             {
