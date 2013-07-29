@@ -125,5 +125,25 @@ namespace BA1
             AppSettings.RecentIds.Save();
             Refresh();
         }
+
+        /// <summary>
+        /// Collection of recent stops
+        /// </summary>
+        public static IEnumerable<BusStop> RecentBusStops
+        {
+            get
+            {
+                List<BusStop> retval = new List<BusStop>();
+                foreach (var id in AppSettings.RecentIds.Value)
+                {
+                    if (AppSettings.KnownStops.Value.ContainsKey(id))
+                    {
+                        retval.Add(AppSettings.KnownStops.Value[id]);
+                    }
+                }
+                return retval;
+            }
+        }
+
     }
 }

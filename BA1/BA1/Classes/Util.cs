@@ -193,56 +193,32 @@ namespace BA1
 
         #endregion
 
-    }
-
-    public static class VoiceHelper
-    {
         /// <summary>
-        /// Load VDH file to initialize voice capabilities
+        /// Retrieve the parameter from the uri
         /// </summary>
-        public static async Task InitializeSpeech()
+        /// <param name="uri"></param>
+        /// <param name="key"></param>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public static bool TryGetValue(this Uri uri, string key, out string val)
         {
-            try
+            var queries = uri.ToString().Split('&', '?');
+            foreach (var query in queries)
             {
-                await VoiceCommandService.InstallCommandSetsFromFileAsync(
-                    new Uri("ms-appx:///Resources/BusStopVHD.xml"));
-            }
-            catch
-            {
-                Util.BeginInvoke(() =>
+                if (query.StartsWith(key))
                 {
-                    MessageBox.Show("Unable to initialize voice capabilities",
-                        "Error", MessageBoxButton.OK);
-                });
-            }
-        }
-
-        public const string CommandSetName = "BusAlarmEnu";
-        public const string RouteNumPhraseList = "route_num";
-        public const string SearchCommandName = "StopSearchByRoute";
-
-        /// <summary>
-        /// Update route_num
-        /// </summary>
-        public static async Task UpdateRoutePhraseList()
-        {
-            try
-            {
-                VoiceCommandSet vcs;
-                if (VoiceCommandService.InstalledCommandSets.TryGetValue(CommandSetName, out vcs))
-                {
-                    await vcs.UpdatePhraseListAsync(RouteNumPhraseList, TransitInfo.RouteIDs.Keys);
+                    int equalsIndex = query.IndexOf('=');
+                    if (equalsIndex >= 0)
+                    {
+                        val = query.Substring(equalsIndex);
+                        return true;
+                    }
                 }
             }
-            catch
-            {
-                Util.BeginInvoke(() =>
-                {
-                    MessageBox.Show("Unable to update voice phraseology",
-                        "Error", MessageBoxButton.OK);
-                });
-            }
+            val = null;
+            return false;
         }
+
     }
 
     /// <summary>

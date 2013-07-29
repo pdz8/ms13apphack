@@ -51,41 +51,81 @@ namespace BA1
         /// Execute upon arriving from navigation
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
             // Update the current dispatcher
             Util.CurrentDispatcher = this.Dispatcher;
 
-            // Create view model
-            string stop_id;
-            if (NavigationContext.QueryString.TryGetValue("stop_id", out stop_id) && this.startup)
+            // Setup Context and ViewModel
+            if (this.startup)
             {
-                // Initialize ViewModel
-                ViewModel = new TrackingVM(AppSettings.KnownStops.Value[stop_id]);
-                this.DataContext = this.ViewModel;
-                
-                // Initialize progress bar
-                InitializeProgress();
-
-                // Get location if necessary
-                if (LocationTracker.Location == null)
+                string stop_id;
+                if (this.NavigationContext.QueryString.TryGetValue("stop_id", out stop_id))
                 {
-                    ProgressIndicatorHelper.Instance.Push(LoadingEnum.Location);
-                    LocationTracker.RetrieveLocation();
+                    // Initialize ViewModel
+                    this.ViewModel = new TrackingVM(AppSettings.KnownStops.Value[stop_id]);
+
+                    // Finish initialization after ViewModel is set
+                    this.InitializeFromViewModel();
+
+                    // Update phrase list for stops
+                    await VoiceHelper.UpdateStopNamePhraseList();
                 }
+                else if (this.NavigationContext.QueryString.ContainsKey(VoiceHelper.VoiceCommandName))
+                {
+                    string commandName = this.NavigationContext.QueryString[VoiceHelper.VoiceCommandName];
+                    string stopName;
+                    if (this.NavigationContext.QueryString.TryGetValue(VoiceHelper.StopNamePhraseList, out stopName))
+                    {
+                        var possibleStops = RecentStopsQueue.RecentBusStops.Concat(BusStop.PinnedStops);
+                        BusStop stopContext = possibleStops.FirstOrDefault(s => s.Name == stopName);
+                        if (stopContext != null)
+                        {
+                            // Initialize ViewModel
+                            this.ViewModel = new TrackingVM(stopContext);
 
-                // Update recent stops
-                RecentStopsQueue.Push(ViewModel.Context);
+                            // Finish initialization after ViewModel is set
+                            this.InitializeFromViewModel();
 
-                // Preven further initialization
-                this.startup = false;
+                            // Automatically start tracking
+                            if (commandName == VoiceHelper.AlarmSetCommand)
+                            {
+                                this.ViewModel.BeginGeofence();
+                            }
+                        }
+                    }
+                }
             }
 
             // Animate app bar
             this.AppBarEntrance.Begin();
             this.AppBarButtonsEntrance.Begin();
+        }
+
+        /// <summary>
+        /// Finish initialization after setting the viewmodel
+        /// </summary>
+        private void InitializeFromViewModel()
+        {
+            this.DataContext = this.ViewModel;
+
+            // Initialize progress bar
+            InitializeProgress();
+
+            // Get location if necessary
+            if (LocationTracker.Location == null)
+            {
+                ProgressIndicatorHelper.Instance.Push(LoadingEnum.Location);
+                LocationTracker.RetrieveLocation();
+            }
+
+            // Update recent stops
+            RecentStopsQueue.Push(ViewModel.Context);
+
+            // Preven further initialization
+            this.startup = false;
         }
 
         /// <summary>

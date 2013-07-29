@@ -100,6 +100,7 @@
     <Compile Include="Classes\TiltEffect.cs" />
     <Compile Include="Classes\TransitInfo.cs" />
     <Compile Include="Classes\Util.cs" />
+    <Compile Include="Classes\VoiceHelper.cs" />
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="Models\BusStop.cs" />
     <Compile Include="Models\BusRoute.cs" />

@@ -169,6 +169,8 @@ namespace BA1
 
         #region Pin to start
 
+        public const string IdQueryKey = "stop_id";
+
         /// <summary>
         /// Pin the stop to the start screen. TODO: make pretty
         /// </summary>
@@ -182,7 +184,7 @@ namespace BA1
                 return;
             }
 
-            Uri tileUri = new Uri(string.Format("/Pages/TrackingPage.xaml?stop_id={0}", stop.Id), UriKind.Relative);
+            Uri tileUri = new Uri(string.Format("/Pages/TrackingPage.xaml?{1}={0}", stop.Id, BusStop.IdQueryKey), UriKind.Relative);
             StandardTileData tileData = new StandardTileData()
             {
                 Title = stop.Name,
@@ -204,6 +206,29 @@ namespace BA1
             get { return ShellTile.ActiveTiles.Any(s => s.NavigationUri.ToString().Contains(this.Id)); }
         }
         public bool IsNotPinned { get { return !IsPinned; } }
+
+        /// <summary>
+        /// Currently pinned stops
+        /// </summary>
+        public static IEnumerable<BusStop> PinnedStops
+        {
+            get
+            {
+                List<BusStop> retval = new List<BusStop>();
+                foreach (ShellTile tile in ShellTile.ActiveTiles)
+                {
+                    string id;
+                    if (tile.NavigationUri.TryGetValue(BusStop.IdQueryKey, out id))
+                    {
+                        if (AppSettings.KnownStops.Value.ContainsKey(id))
+                        {
+                            retval.Add(AppSettings.KnownStops.Value[id]);
+                        }
+                    }
+                }
+                return retval;
+            }
+        }
 
         #endregion
 

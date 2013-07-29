@@ -8,7 +8,7 @@
     <Example>search stops for route 452</Example>
 
     <Command Name="StopSearchByRoute">
-      <Example>search stops for route 452</Example>
+      <Example>route 452</Example>
       <ListenFor>route {route_num}</ListenFor>
       <ListenFor>search stops for route {route_num}</ListenFor>
       <ListenFor>find stops for route {route_num}</ListenFor>
@@ -16,8 +16,23 @@
       <Navigate Target="/Pages/StopResultPage.xaml"/>
     </Command>
 
-    <PhraseList Label="route_num"></PhraseList>
+    <Command Name="StopSearchByStop">
+      <Example>stop Overlake TC</Example>
+      <ListenFor>[bus] stop {stop_name}</ListenFor>
+      <Feedback>Opening stop {stop_name}</Feedback>
+      <Navigate Target="/Pages/TrackingPage.xaml"/>
+    </Command>
     
+    <Command Name="TrackStopByStop">
+      <Example>set alarm for Overlake TC</Example>
+      <ListenFor>set alarm [for] [bus] [stop] {stop_name}</ListenFor>
+      <Feedback>Setting alarm for stop {stop_name}</Feedback>
+      <Navigate Target="/Pages/TrackingPage.xaml"/>
+    </Command>
+    
+    <PhraseList Label="route_num"></PhraseList>
+    <PhraseList Label="stop_name"></PhraseList>
+  
   </CommandSet>
   
 </VoiceCommands>
