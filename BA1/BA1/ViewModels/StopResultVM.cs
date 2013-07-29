@@ -13,6 +13,8 @@ namespace BA1
 {
     public class StopResultVM : INotifyPropertyChanged
     {
+        #region Initialization
+
         public BusRoute Context { get; private set; }
 
         public StopResultVM(BusRoute br)
@@ -33,6 +35,29 @@ namespace BA1
         /// </summary>
         public static StopResultVM CurrentInstance { get; private set; }
 
+        #endregion
+
+        #region Location
+
+        /// <summary>
+        /// Location at launch of view
+        /// </summary>
+        public GeoCoordinate MyLocation
+        { 
+            get { return LocationTracker.Location ?? new GeoCoordinate(); } 
+        }
+
+        /// <summary>
+        /// Update from location in LocationTracker
+        /// </summary>
+        public void UpdateFromLocation()
+        {
+            this.NotifyPropertyChanged("MyLocation");
+        }
+
+        #endregion
+
+        #region Stop loading
 
         /// <summary>
         /// Get all stops that the route visits
@@ -79,22 +104,6 @@ namespace BA1
         }
 
         /// <summary>
-        /// Location at launch of view
-        /// </summary>
-        public GeoCoordinate MyLocation
-        { 
-            get { return LocationTracker.Location ?? new GeoCoordinate(); } 
-        }
-
-        /// <summary>
-        /// Update from location in LocationTracker
-        /// </summary>
-        public void UpdateFromLocation()
-        {
-            this.NotifyPropertyChanged("MyLocation");
-        }
-
-        /// <summary>
         /// Stops to display in ResultsList
         /// </summary>
         public ObservableCollection<BusStop> Stops { get; set; }
@@ -131,6 +140,8 @@ namespace BA1
                 NotifyPropertyChanged("NumStopsVisibility");
             }
         }
+
+        #endregion
 
         #region Text properties
 

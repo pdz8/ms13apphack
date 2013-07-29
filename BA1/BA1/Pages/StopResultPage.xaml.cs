@@ -161,7 +161,7 @@ namespace BA1
             {
                 this.ExpandSpacer.Begin();
             }
-            this.ContentPanel.Visibility = Visibility.Collapsed;
+            //this.ContentPanel.Visibility = Visibility.Collapsed;
         }
 
         private void Grid_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -170,7 +170,7 @@ namespace BA1
             {
                 this.ContractSpacer.Begin();
             }
-            this.ContentPanel.Visibility = Visibility.Visible;
+            //this.ContentPanel.Visibility = Visibility.Visible;
         }
 
         #endregion
