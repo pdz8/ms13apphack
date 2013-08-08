@@ -82,6 +82,10 @@ namespace BA1
                 {
 
                     stop = await TransitLoader.GetStop(id);
+                    if (stop == null)
+                    {
+                        break;
+                    }
                     await TransitLoader.GetTransitNetwork(stop.Location);
                 }
                 stopList.Add(stop);

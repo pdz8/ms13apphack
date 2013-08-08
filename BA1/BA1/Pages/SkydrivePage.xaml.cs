@@ -96,6 +96,8 @@ namespace BA1.Pages
         /// <param name="e"></param>
         private async void BackupBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (!TransitLoader.InternetAvailable()) return;
+
             ProgressIndicatorHelper.Instance.Push(LoadingEnum.Uploading);
             this.ViewModel.LiveButtonEnabled = false;
             try
@@ -124,6 +126,8 @@ namespace BA1.Pages
         /// <param name="e"></param>
         private async void RestoreBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (!TransitLoader.InternetAvailable()) return;
+
             ProgressIndicatorHelper.Instance.Push(LoadingEnum.Downloading);
             this.ViewModel.LiveButtonEnabled = false;
             try

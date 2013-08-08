@@ -10,8 +10,11 @@ using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
 using System.Reflection;
 
-namespace BA1.Pages
+namespace BA1
 {
+    /// <summary>
+    /// About page
+    /// </summary>
     public partial class AboutPage : PhoneApplicationPage
     {
         //bool startup = true;
@@ -19,6 +22,8 @@ namespace BA1.Pages
         public AboutPage()
         {
             InitializeComponent();
+
+            this.DataContext = AboutVM.Instance;
 
             this.VersionBlock.Text = "Version: " + Assembly.GetExecutingAssembly().FullName.Split('=')[1].Split(',')[0];
         }

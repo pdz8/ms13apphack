@@ -69,7 +69,10 @@ namespace BA1
                     ProgressIndicatorHelper.Instance.Push(LoadingEnum.Routes);
                     BusRoute br = await TransitInfo.SearchForRoute(route_name);
                     ProgressIndicatorHelper.Instance.Remove(LoadingEnum.Routes);
-                    LocationTracker.RetrieveLocation();
+                    if (LocationTracker.GetPermission())
+                    {
+                        LocationTracker.RetrieveLocation();
+                    }
                     if (br != null)
                     {
                         this.ViewModel = new StopResultVM(br);
@@ -95,16 +98,23 @@ namespace BA1
             ProgressIndicatorHelper.Instance.Push(LoadingEnum.Stops);
             //PIHelper.Push("Getting stops...");
             //var ls = await TransitInfo.GetStopsOfRoute(this.ViewModel.Context);
-            await ViewModel.GetStopsOfRoute();
+            if (!ViewModel.Context.Stop_Ids.Any(id => !AppSettings.KnownStops.Value.ContainsKey(id)) ||
+                TransitLoader.InternetAvailable())
+            {
+                await ViewModel.GetStopsOfRoute();
+            }
             ProgressIndicatorHelper.Instance.Remove(LoadingEnum.Stops);
 
             // Center the map
-            this.MapItems.ItemsSource = this.ViewModel.Stops;
+            if (this.ViewModel.Stops.Count > 0)
+            {
+                this.MapItems.ItemsSource = this.ViewModel.Stops;
 
-            // Set startup state to false
-            this.startup = false;
+                this.startup = false;
 
-            this.ResultsMap.SetView(LocationRectangle.CreateBoundingRectangle(this.ViewModel.Stops.Select(s => s.Location)));
+                this.ResultsMap.SetView(LocationRectangle.CreateBoundingRectangle(this.ViewModel.Stops.Select(s => s.Location)));
+            }
+            else this.startup = false;
         }
 
         /// <summary>
@@ -145,7 +155,7 @@ namespace BA1
             Microsoft.Phone.Maps.MapsSettings.ApplicationContext.ApplicationId = Util.MapApplicationID;
             Microsoft.Phone.Maps.MapsSettings.ApplicationContext.AuthenticationToken = Util.MapAuthenticationToken;
             System.Threading.Thread.Sleep(500);
-            if (!this.startup && this.ViewModel != null)
+            if (!this.startup && this.ViewModel != null && this.ViewModel.Stops.Count > 0)
             {
                 this.ResultsMap.SetView(LocationRectangle.CreateBoundingRectangle(this.ViewModel.Stops.Select(s => s.Location)));
             }

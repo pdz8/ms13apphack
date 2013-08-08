@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Windows;
 using System.Collections.ObjectModel;
+using Microsoft.Phone.Net.NetworkInformation;
 
 namespace BA1
 {
@@ -67,7 +68,7 @@ namespace BA1
 
             if (MyLocation != null)
             {
-                await TransitLoader.GetTransitNetwork(MyLocation);
+                await TransitLoader.GetTransitNetwork(TransitInfo.MyLocation);
             }
 
             //RefreshRouteIDs();
@@ -103,6 +104,7 @@ namespace BA1
                     if (br.Stop_Ids == null || br.Stop_Ids.Count == 0) return retRoute;
 
                     BusStop firststop = await TransitLoader.GetStop(br.Stop_Ids[0]);
+                    if (firststop == null) continue;
                     var dist = MyLocation.GetDistanceTo(firststop.Location);
                     if (minDist > dist)
                     {
@@ -179,11 +181,15 @@ namespace BA1
             }
             else
             {
-                var response = await DownloadString(rStop(id).ToUri());
-                BusStop retval = JsonConvert.DeserializeObject<BusStop>(response);
-                AppSettings.KnownStops.Value[id] = retval;
-                AppSettings.KnownStops.Save();
-                return retval;
+                try
+                {
+                    var response = await DownloadString(rStop(id).ToUri());
+                    BusStop retval = JsonConvert.DeserializeObject<BusStop>(response);
+                    AppSettings.KnownStops.Value[id] = retval;
+                    AppSettings.KnownStops.Save();
+                    return retval;
+                }
+                catch { return null; }
             }
         }
 
@@ -200,11 +206,15 @@ namespace BA1
             }
             else
             {
-                var response = await DownloadString(rStop(id).ToUri());
-                BusRoute retval = JsonConvert.DeserializeObject<BusRoute>(response);
-                AppSettings.KnownRoutes.Value[id] = retval;
-                AppSettings.KnownRoutes.Save();
-                return retval;
+                try
+                {
+                    var response = await DownloadString(rStop(id).ToUri());
+                    BusRoute retval = JsonConvert.DeserializeObject<BusRoute>(response);
+                    AppSettings.KnownRoutes.Value[id] = retval;
+                    AppSettings.KnownRoutes.Save();
+                    return retval;
+                }
+                catch { return null; }
             }
         }
 
@@ -216,10 +226,14 @@ namespace BA1
         /// <returns></returns>
         public static async Task<TransitNetworkSearch> GetTransitNetwork(double lat, double lon)
         {
-            var response = await DownloadString(rNetworkSearch(lat, lon).ToUri());
-            TransitNetworkSearch tns = JsonConvert.DeserializeObject<TransitNetworkSearch>(response);
-            TransitNetworkSearch.SaveTNS(tns);
-            return tns;
+            try
+            {
+                var response = await DownloadString(rNetworkSearch(lat, lon).ToUri());
+                TransitNetworkSearch tns = JsonConvert.DeserializeObject<TransitNetworkSearch>(response);
+                TransitNetworkSearch.SaveTNS(tns);
+                return tns;
+            }
+            catch { return null; }
         }
         public static async Task<TransitNetworkSearch> GetTransitNetwork(GeoCoordinate geo)
         {
@@ -252,5 +266,29 @@ namespace BA1
 
         #endregion
 
+        #region Helpers
+
+        /// <summary>
+        /// Is internet available?
+        /// </summary>
+        /// <returns></returns>
+        public static bool InternetAvailable()
+        {
+            if (!NetworkInterface.GetIsNetworkAvailable())
+            {
+                Util.BeginInvoke(() =>
+                    {
+                        MessageBox.Show("No internet connection is available.",
+                                    "Cannot connect", MessageBoxButton.OK);
+                    });
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        #endregion
     }
 }

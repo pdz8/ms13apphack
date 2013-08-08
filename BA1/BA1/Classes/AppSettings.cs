@@ -105,13 +105,13 @@ namespace BA1
         {
             if (IsoSettings.Contains(this.Key))
             {
-                if (((T)IsoSettings[this.Key]).Equals(this.Value))
-                {
-                    IsoSettings[Key] = this.Value;
-                    IsoSettings.Save();
-                    return true;
-                }
-                return false;
+                //if (((T)IsoSettings[this.Key]).Equals(this.Value))
+                //{
+                IsoSettings[Key] = this.Value;
+                IsoSettings.Save();
+                return true;
+                //}
+                //return false;
             }
             else
             {

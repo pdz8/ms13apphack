@@ -8,6 +8,7 @@ using Windows.Devices.Geolocation;
 using System.Device.Location;
 using System.Windows.Threading;
 using System.Windows.Controls;
+using System.Windows;
 
 namespace BA1
 {
@@ -99,6 +100,33 @@ namespace BA1
             return new GeoCoordinate(pos.Coordinate.Latitude, pos.Coordinate.Longitude);
         }
 
+        /// <summary>
+        /// Returns whether we have permission to use location
+        /// </summary>
+        /// <returns></returns>
+        public static bool GetPermission()
+        {
+            // Return if we already have permission
+            if (AppSettings.LocationConsent.Value)
+            {
+                return true;
+            }
+
+            // Attempt to get permission
+            MessageBoxResult mbr = MessageBox.Show("This app requires your phone's location in order to operate. Is that ok?",
+                    "Location", MessageBoxButton.OKCancel);
+            if (mbr == MessageBoxResult.OK)
+            {
+                AppSettings.LocationConsent.Value = true;
+                AppSettings.LocationConsent.Save();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         #region LocationTracker API
 
         /// <summary>
@@ -150,6 +178,8 @@ namespace BA1
 
         #endregion
 
+        #region GPS events
+
         static void GPS_PositionChanged(Geolocator sender, PositionChangedEventArgs args)
         {
             Location = args.Position.ToGeoCoordinate();
@@ -184,6 +214,8 @@ namespace BA1
                     break;
             }
         }
+
+        #endregion
 
     }
 

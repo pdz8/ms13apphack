@@ -69,36 +69,36 @@ namespace BA1
                 SystemTray.ForegroundColor = Colors.Black;
 
                 // Get Permissions
-                GetPermissions();
+                if (LocationTracker.GetPermission())
+                {
+                    // Find location
+                    ProgressIndicatorHelper.Instance.Push(LoadingEnum.Location);
+                    LocationTracker.RetrieveLocation();
+                }
                 
-                // Find location
-                ProgressIndicatorHelper.Instance.Push(LoadingEnum.Location);
-                LocationTracker.RetrieveLocation();
-
                 // Setup speech recognition
                 await VoiceHelper.InitializeSpeech();
             }
             
         }
 
-
-        /// <summary>
-        /// Assure that app has required user consent
-        /// </summary>
-        public void GetPermissions()
-        {
-            if (!AppSettings.LocationConsent.Value)
-            {
-                MessageBoxResult mbr = MessageBox.Show("This app requires your phone's location in order to operate. Is that ok?",
-                    "Location", MessageBoxButton.OKCancel);
-                if (mbr == MessageBoxResult.OK)
-                {
-                    AppSettings.LocationConsent.Value = true;
-                    AppSettings.LocationConsent.Save();
-                }
-                else Application.Current.Terminate();
-            }
-        }
+        ///// <summary>
+        ///// Assure that app has required user consent
+        ///// </summary>
+        //public void GetPermissions()
+        //{
+        //    if (!AppSettings.LocationConsent.Value)
+        //    {
+        //        MessageBoxResult mbr = MessageBox.Show("This app requires your phone's location in order to operate. Is that ok?",
+        //            "Location", MessageBoxButton.OKCancel);
+        //        if (mbr == MessageBoxResult.OK)
+        //        {
+        //            AppSettings.LocationConsent.Value = true;
+        //            AppSettings.LocationConsent.Save();
+        //        }
+        //        else Application.Current.Terminate();
+        //    }
+        //}
 
         #endregion
 
@@ -139,10 +139,15 @@ namespace BA1
             }
 
             ProgressIndicatorHelper.Instance.Push(LoadingEnum.Routes);
-            var br = await TransitInfo.SearchForRoute(this.RouteSearchBox.Text);
+            BusRoute br = await TransitInfo.SearchForRoute(this.RouteSearchBox.Text);
+            if (br == null && !AppSettings.LocationConsent.Value && LocationTracker.GetPermission())
+            {
+                br = await TransitInfo.SearchForRoute(this.RouteSearchBox.Text);
+            }
             ProgressIndicatorHelper.Instance.Remove(LoadingEnum.Routes);
             if (br == null)
             {
+                TransitLoader.InternetAvailable();
                 MessageBox.Show(string.Format("Could not find route {0}.", this.RouteSearchBox.Text),
                     "No matches", MessageBoxButton.OK);
                 return;

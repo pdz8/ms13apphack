@@ -115,7 +115,7 @@ namespace BA1
             InitializeProgress();
 
             // Get location if necessary
-            if (LocationTracker.Location == null)
+            if (LocationTracker.Location == null && LocationTracker.GetPermission())
             {
                 ProgressIndicatorHelper.Instance.Push(LoadingEnum.Location);
                 LocationTracker.RetrieveLocation();
@@ -210,7 +210,10 @@ namespace BA1
                     BusStop.PinToStart(this.ViewModel.Context);
                     break;
                 case TrackingVM.BtnStartTracking:
-                    this.ViewModel.BeginGeofence();
+                    if (LocationTracker.GetPermission())
+                    {
+                        this.ViewModel.BeginGeofence();
+                    }
                     break;
                 case TrackingVM.BtnStopTracking:
                     this.ViewModel.StopGeofence();

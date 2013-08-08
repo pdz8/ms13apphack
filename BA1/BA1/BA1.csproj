@@ -114,6 +114,7 @@
     <Compile Include="Pages\TrackingPage.xaml.cs">
       <DependentUpon>TrackingPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\AboutVM.cs" />
     <Compile Include="ViewModels\PanoVM.cs" />
     <Compile Include="ViewModels\SkydriveVM.cs" />
     <Compile Include="ViewModels\StopResultVM.cs" />
